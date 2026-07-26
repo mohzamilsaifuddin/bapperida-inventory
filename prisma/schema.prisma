@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  nama      String
+  username  String   @unique
+  password  String
+  role      String   // ADMIN, PETUGAS, PIMPINAN
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Kategori {
+  id            String   @id @default(cuid())
+  nama_kategori String
+  barang        Barang[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Barang {
+  id           String   @id @default(cuid())
+  kode_barang  String   @unique
+  nama_barang  String
+  kategori_id  String
+  kategori     Kategori @relation(fields: [kategori_id], references: [id])
+  satuan       String
+  stok         Int      @default(0)
+  stok_minimum Int      @default(0)
+  lokasi       String?
+  keterangan   String?
+  
+  barangMasuk  BarangMasuk[]
+  barangKeluar BarangKeluar[]
+  prediksi     Prediksi[]
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model BarangMasuk {
+  id              String   @id @default(cuid())
+  nomor_transaksi String   @unique
+  tanggal         DateTime
+  barang_id       String
+  barang          Barang   @relation(fields: [barang_id], references: [id])
+  jumlah          Int
+  supplier        String?
+  keterangan      String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model BarangKeluar {
+  id              String   @id @default(cuid())
+  nomor_transaksi String   @unique
+  tanggal         DateTime
+  barang_id       String
+  barang          Barang   @relation(fields: [barang_id], references: [id])
+  jumlah          Int
+  tujuan          String?
+  keterangan      String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Prediksi {
+  id         String   @id @default(cuid())
+  barang_id  String
+  barang     Barang   @relation(fields: [barang_id], references: [id])
+  periode    Int      // jumlah bulan (misal 3 bulan)
+  hasil_ma   Float    // hasil perhitungan
+  prediksi   Float    // angka prediksi/rekomendasi
+  tanggal    DateTime @default(now())
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
