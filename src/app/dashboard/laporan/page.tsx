@@ -51,17 +51,17 @@ export default async function LaporanPage({
         <form className="flex gap-4 items-end">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Bulan</label>
-            <select name="bulan" defaultValue={filterBulan} className="px-4 py-2 border border-slate-300 rounded-lg">
+            <select name="bulan" defaultValue={filterBulan} className="px-4 py-2 border border-slate-300 rounded-lg text-slate-900 bg-white">
               {Array.from({ length: 12 }).map((_, i) => (
-                <option key={i} value={i + 1}>{new Date(2000, i, 1).toLocaleDateString('id-ID', { month: 'long' })}</option>
+                <option key={i} value={i + 1} className="text-slate-900">{new Date(2000, i, 1).toLocaleDateString('id-ID', { month: 'long' })}</option>
               ))}
             </select>
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Tahun</label>
-            <select name="tahun" defaultValue={filterTahun} className="px-4 py-2 border border-slate-300 rounded-lg">
+            <select name="tahun" defaultValue={filterTahun} className="px-4 py-2 border border-slate-300 rounded-lg text-slate-900 bg-white">
               {[currentYear - 1, currentYear, currentYear + 1].map(y => (
-                <option key={y} value={y}>{y}</option>
+                <option key={y} value={y} className="text-slate-900">{y}</option>
               ))}
             </select>
           </div>
