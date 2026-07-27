@@ -5,14 +5,15 @@ import DashboardCharts from "@/components/DashboardCharts";
 export default async function PrediksiPage({
   searchParams,
 }: {
-  searchParams: { barang_id?: string; periode?: string };
+  searchParams: Promise<{ barang_id?: string; periode?: string }>;
 }) {
+  const resolvedSearchParams = await searchParams;
   const barangList = await prisma.barang.findMany({
     orderBy: { nama_barang: 'asc' }
   });
 
-  const selectedBarangId = searchParams.barang_id;
-  const selectedPeriode = parseInt(searchParams.periode || "3"); // Default 3 bulan
+  const selectedBarangId = resolvedSearchParams.barang_id;
+  const selectedPeriode = parseInt(resolvedSearchParams.periode || "3"); // Default 3 bulan
 
   let predictionData: any = null;
   let chartData = { labels: [] as string[], data: [] as number[] };

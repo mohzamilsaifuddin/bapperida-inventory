@@ -5,13 +5,14 @@ import ClientPrintButton from "./ClientPrintButton";
 export default async function LaporanPage({
   searchParams,
 }: {
-  searchParams: { bulan?: string; tahun?: string };
+  searchParams: Promise<{ bulan?: string; tahun?: string }>;
 }) {
+  const resolvedSearchParams = await searchParams;
   const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
   
-  const filterBulan = searchParams.bulan ? parseInt(searchParams.bulan) : currentMonth;
-  const filterTahun = searchParams.tahun ? parseInt(searchParams.tahun) : currentYear;
+  const filterBulan = resolvedSearchParams.bulan ? parseInt(resolvedSearchParams.bulan) : currentMonth;
+  const filterTahun = resolvedSearchParams.tahun ? parseInt(resolvedSearchParams.tahun) : currentYear;
 
   // Set date range based on filter
   const startDate = new Date(filterTahun, filterBulan - 1, 1);
