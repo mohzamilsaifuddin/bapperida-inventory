@@ -11,7 +11,8 @@ import {
   DoorOpen,
   FolderOpen,
   PanelLeftClose,
-  PanelLeftOpen
+  PanelLeftOpen,
+  X
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
@@ -19,12 +20,14 @@ export function Sidebar({
   role, 
   nama, 
   isCollapsed = false,
-  onToggle
+  onToggle,
+  onCloseMobile
 }: { 
   role: string; 
   nama: string; 
   isCollapsed?: boolean;
   onToggle: () => void;
+  onCloseMobile?: () => void;
 }) {
   const pathname = usePathname();
 
@@ -40,6 +43,12 @@ export function Sidebar({
 
   const allowedMenus = menuItems.filter((item) => item.roles.includes(role));
 
+  const handleLinkClick = () => {
+    if (onCloseMobile) {
+      onCloseMobile();
+    }
+  };
+
   return (
     <aside className="w-full bg-slate-900 text-slate-300 flex flex-col min-h-screen border-r border-slate-800 transition-all duration-300">
       {/* Brand Header */}
@@ -54,18 +63,28 @@ export function Sidebar({
               </div>
             </div>
             
+            {/* Close Toggle Button (For Desktop / Collapsible sidebar) */}
             <button
               onClick={onToggle}
-              className="p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors flex items-center justify-center"
+              className="p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors flex items-center justify-center hidden md:flex"
               title="Sembunyikan Sidebar"
             >
               <PanelLeftClose size={20} />
+            </button>
+
+            {/* Mobile close button (Cross icon) */}
+            <button
+              onClick={onCloseMobile}
+              className="p-1.5 hover:bg-slate-850 rounded-lg text-slate-400 hover:text-white transition-colors flex items-center justify-center md:hidden"
+              title="Tutup Menu"
+            >
+              <X size={20} />
             </button>
           </>
         ) : (
           <button
             onClick={onToggle}
-            className="p-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-blue-400 hover:text-blue-300 transition-all border border-slate-700 flex items-center justify-center shadow-lg"
+            className="p-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-blue-400 hover:text-blue-300 transition-all border border-slate-700 flex items-center justify-center shadow-lg hidden md:flex"
             title="Tampilkan Sidebar"
           >
             <PanelLeftOpen size={20} />
@@ -98,6 +117,7 @@ export function Sidebar({
             <Link
               key={item.name}
               href={item.href}
+              onClick={handleLinkClick}
               className={`flex items-center rounded-lg transition-all ${
                 isCollapsed ? "justify-center p-2.5" : "gap-3 px-4 py-3"
               } ${
