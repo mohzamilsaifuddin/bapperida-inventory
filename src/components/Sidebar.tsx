@@ -44,26 +44,33 @@ export function Sidebar({
     <aside className="w-full bg-slate-900 text-slate-300 flex flex-col min-h-screen border-r border-slate-800 transition-all duration-300">
       {/* Brand Header */}
       <div className={`p-6 flex items-center ${isCollapsed ? "justify-center" : "justify-between"}`}>
-        <div className="flex items-center gap-2">
-          <Package className="text-blue-500 flex-shrink-0" size={24} />
-          {!isCollapsed && (
-            <div className="transition-opacity duration-300">
-              <h2 className="text-xl font-bold text-white tracking-tight leading-none">Inventaris</h2>
-              <p className="text-[10px] text-slate-500 mt-1">BAPPERIDA Bandar Lampung</p>
+        {!isCollapsed ? (
+          <>
+            <div className="flex items-center gap-2">
+              <Package className="text-blue-500 flex-shrink-0" size={24} />
+              <div className="transition-opacity duration-300">
+                <h2 className="text-xl font-bold text-white tracking-tight leading-none">Inventaris</h2>
+                <p className="text-[10px] text-slate-500 mt-1">BAPPERIDA Bandar Lampung</p>
+              </div>
             </div>
-          )}
-        </div>
-        
-        {/* Toggle Button Inside Sidebar */}
-        <button
-          onClick={onToggle}
-          className={`p-1.5 hover:bg-slate-850 rounded-lg text-slate-400 hover:text-white transition-colors flex items-center justify-center ${
-            isCollapsed ? "absolute top-6" : ""
-          }`}
-          title={isCollapsed ? "Tampilkan Sidebar" : "Sembunyikan Sidebar"}
-        >
-          {isCollapsed ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
-        </button>
+            
+            <button
+              onClick={onToggle}
+              className="p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-colors flex items-center justify-center"
+              title="Sembunyikan Sidebar"
+            >
+              <PanelLeftClose size={20} />
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={onToggle}
+            className="p-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-blue-400 hover:text-blue-300 transition-all border border-slate-700 flex items-center justify-center shadow-lg"
+            title="Tampilkan Sidebar"
+          >
+            <PanelLeftOpen size={20} />
+          </button>
+        )}
       </div>
 
       {/* User Info */}
