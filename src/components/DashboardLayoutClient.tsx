@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Sidebar } from "./Sidebar";
-import { Menu, ChevronLeft, ChevronRight } from "lucide-react";
 
 export function DashboardLayoutClient({
   children,
@@ -23,20 +22,19 @@ export function DashboardLayoutClient({
           isCollapsed ? "w-20" : "w-64"
         } relative flex-shrink-0`}
       >
-        <Sidebar role={role} nama={nama} isCollapsed={isCollapsed} />
+        <Sidebar
+          role={role}
+          nama={nama}
+          isCollapsed={isCollapsed}
+          onToggle={() => setIsCollapsed(!isCollapsed)}
+        />
       </div>
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
-        {/* Top Navbar with Toggle Button */}
+        {/* Top Navbar (without Toggle Button, clean header) */}
         <header className="bg-white border-b border-slate-150 h-16 flex items-center px-6 sticky top-0 z-10">
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-2 hover:bg-slate-100 rounded-lg text-slate-600 transition-colors flex items-center justify-center"
-            title={isCollapsed ? "Tampilkan Sidebar" : "Sembunyikan Sidebar"}
-          >
-            <Menu size={22} />
-          </button>
+          <span className="text-sm font-medium text-slate-500">Sistem Inventaris BAPPERIDA</span>
         </header>
 
         {/* Content Body */}
@@ -47,3 +45,4 @@ export function DashboardLayoutClient({
     </div>
   );
 }
+

@@ -9,18 +9,22 @@ import {
   LineChart, 
   FileText, 
   DoorOpen,
-  FolderOpen
+  FolderOpen,
+  PanelLeftClose,
+  PanelLeftOpen
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
 export function Sidebar({ 
   role, 
   nama, 
-  isCollapsed = false 
+  isCollapsed = false,
+  onToggle
 }: { 
   role: string; 
   nama: string; 
   isCollapsed?: boolean;
+  onToggle: () => void;
 }) {
   const pathname = usePathname();
 
@@ -39,7 +43,7 @@ export function Sidebar({
   return (
     <aside className="w-full bg-slate-900 text-slate-300 flex flex-col min-h-screen border-r border-slate-800 transition-all duration-300">
       {/* Brand Header */}
-      <div className={`p-6 ${isCollapsed ? "flex justify-center" : ""}`}>
+      <div className={`p-6 flex items-center ${isCollapsed ? "justify-center" : "justify-between"}`}>
         <div className="flex items-center gap-2">
           <Package className="text-blue-500 flex-shrink-0" size={24} />
           {!isCollapsed && (
@@ -49,10 +53,21 @@ export function Sidebar({
             </div>
           )}
         </div>
+        
+        {/* Toggle Button Inside Sidebar */}
+        <button
+          onClick={onToggle}
+          className={`p-1.5 hover:bg-slate-850 rounded-lg text-slate-400 hover:text-white transition-colors flex items-center justify-center ${
+            isCollapsed ? "absolute top-6" : ""
+          }`}
+          title={isCollapsed ? "Tampilkan Sidebar" : "Sembunyikan Sidebar"}
+        >
+          {isCollapsed ? <PanelLeftOpen size={20} /> : <PanelLeftClose size={20} />}
+        </button>
       </div>
 
       {/* User Info */}
-      <div className={`px-4 pb-4 border-b border-slate-800 ${isCollapsed ? "flex justify-center" : ""}`}>
+      <div className={`px-4 pb-4 border-b border-slate-800 ${isCollapsed ? "flex justify-center mt-6" : ""}`}>
         <div className={`flex items-center bg-slate-800 p-2.5 rounded-xl ${isCollapsed ? "w-10 h-10 justify-center p-0" : "gap-3"}`}>
           <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold flex-shrink-0 text-sm">
             {nama.charAt(0).toUpperCase()}
