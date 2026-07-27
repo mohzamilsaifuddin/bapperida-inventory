@@ -13,7 +13,15 @@ import {
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
-export function Sidebar({ role, nama }: { role: string; nama: string }) {
+export function Sidebar({ 
+  role, 
+  nama, 
+  isCollapsed = false 
+}: { 
+  role: string; 
+  nama: string; 
+  isCollapsed?: boolean;
+}) {
   const pathname = usePathname();
 
   const menuItems = [
@@ -29,28 +37,37 @@ export function Sidebar({ role, nama }: { role: string; nama: string }) {
   const allowedMenus = menuItems.filter((item) => item.roles.includes(role));
 
   return (
-    <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col min-h-screen">
-      <div className="p-6">
-        <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-          <Package className="text-blue-500" />
-          <span>Inventaris</span>
-        </h2>
-        <p className="text-xs text-slate-500 mt-1">BAPPERIDA Bandar Lampung</p>
-      </div>
-
-      <div className="px-4 pb-4 border-b border-slate-800">
-        <div className="flex items-center gap-3 bg-slate-800 p-3 rounded-xl">
-          <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">
-            {nama.charAt(0).toUpperCase()}
-          </div>
-          <div className="overflow-hidden">
-            <p className="text-sm font-semibold text-white truncate">{nama}</p>
-            <p className="text-xs text-blue-400">{role}</p>
-          </div>
+    <aside className="w-full bg-slate-900 text-slate-300 flex flex-col min-h-screen border-r border-slate-800 transition-all duration-300">
+      {/* Brand Header */}
+      <div className={`p-6 ${isCollapsed ? "flex justify-center" : ""}`}>
+        <div className="flex items-center gap-2">
+          <Package className="text-blue-500 flex-shrink-0" size={24} />
+          {!isCollapsed && (
+            <div className="transition-opacity duration-300">
+              <h2 className="text-xl font-bold text-white tracking-tight leading-none">Inventaris</h2>
+              <p className="text-[10px] text-slate-500 mt-1">BAPPERIDA Bandar Lampung</p>
+            </div>
+          )}
         </div>
       </div>
 
-      <nav className="flex-1 px-4 py-6 space-y-2">
+      {/* User Info */}
+      <div className={`px-4 pb-4 border-b border-slate-800 ${isCollapsed ? "flex justify-center" : ""}`}>
+        <div className={`flex items-center bg-slate-800 p-2.5 rounded-xl ${isCollapsed ? "w-10 h-10 justify-center p-0" : "gap-3"}`}>
+          <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold flex-shrink-0 text-sm">
+            {nama.charAt(0).toUpperCase()}
+          </div>
+          {!isCollapsed && (
+            <div className="overflow-hidden transition-opacity duration-300">
+              <p className="text-xs font-semibold text-white truncate">{nama}</p>
+              <p className="text-[10px] text-blue-400 font-medium">{role}</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Navigation Menus */}
+      <nav className="flex-1 px-3 py-6 space-y-1">
         {allowedMenus.map((item) => {
           const isActive = item.href === "/dashboard"
             ? pathname === "/dashboard"
@@ -59,28 +76,36 @@ export function Sidebar({ role, nama }: { role: string; nama: string }) {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+              className={`flex items-center rounded-lg transition-all ${
+                isCollapsed ? "justify-center p-2.5" : "gap-3 px-4 py-3"
+              } ${
                 isActive
                   ? "bg-blue-600 text-white shadow-lg shadow-blue-900/20"
                   : "hover:bg-slate-800 hover:text-white"
               }`}
+              title={isCollapsed ? item.name : undefined}
             >
               <item.icon size={20} className={isActive ? "text-white" : "text-slate-400"} />
-              <span className="font-medium">{item.name}</span>
+              {!isCollapsed && <span className="font-medium text-sm transition-opacity duration-300">{item.name}</span>}
             </Link>
           );
         })}
       </nav>
 
-      <div className="p-4 border-t border-slate-800">
+      {/* Logout Button */}
+      <div className="p-3 border-t border-slate-800">
         <button
           onClick={() => signOut({ callbackUrl: "/login" })}
-          className="flex items-center gap-3 px-4 py-3 w-full rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all"
+          className={`flex items-center text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all rounded-lg ${
+            isCollapsed ? "justify-center p-2.5 w-10 h-10 mx-auto" : "gap-3 px-4 py-3 w-full"
+          }`}
+          title={isCollapsed ? "Logout" : undefined}
         >
           <DoorOpen size={20} />
-          <span className="font-medium">Logout</span>
+          {!isCollapsed && <span className="font-medium text-sm">Logout</span>}
         </button>
       </div>
     </aside>
   );
 }
+

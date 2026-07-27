@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { Sidebar } from "@/components/Sidebar";
+import { DashboardLayoutClient } from "@/components/DashboardLayoutClient";
 
 export default async function DashboardLayout({
   children,
@@ -15,13 +15,8 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
-      <Sidebar role={session.user.role} nama={session.user.nama} />
-      <main className="flex-1 overflow-x-hidden overflow-y-auto">
-        <div className="container mx-auto px-6 py-8">
-          {children}
-        </div>
-      </main>
-    </div>
+    <DashboardLayoutClient role={session.user.role} nama={session.user.nama}>
+      {children}
+    </DashboardLayoutClient>
   );
 }
